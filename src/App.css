@@ -44,12 +44,12 @@
   color: #888;
 }
 
-.phone-signin {
-  position: absolute;
-  top: 30%;
-  left: 40%
-}
+/* App.css */
 
-.phone-content {
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   text-align: center;
 }

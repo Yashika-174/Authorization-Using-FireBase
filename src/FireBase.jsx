@@ -1,6 +1,6 @@
 import { createContext } from "react";
 import { initializeApp } from 'firebase/app';
-import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, signOut, GithubAuthProvider, OAuthProvider, RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
+import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, signOut, GithubAuthProvider, OAuthProvider } from "firebase/auth";
 import { getDatabase, ref, set } from 'firebase/database';
 
 const firebaseConfig = {
@@ -112,45 +112,9 @@ export function FireBaseProvider({ children }) {
     });
   }
 
-  function onCaptchVerify() {
-  if (!window.recaptchaVerifier) {
-    window.recaptchaVerifier = new RecaptchaVerifier('recaptcha-container', {
-      size: 'invisible',
-      callback: (response) => {
-        console.log('Recaptcha verified');
-      },
-      'expired-callback': () => {
-        console.log('Recaptcha expired');
-      }
-    }, fireBaseAuth);
-  }
-}
-
-
- function onSignUp(setLoading, setShowOTP, ph, toast) {
-  setLoading(true);
-  onCaptchVerify();
-  const appVerifier = window.recaptchaVerifier;
-  const formatPh = '+' + ph.replace(/\D/g, '');
-  console.log(`Formatted Phone Number: ${formatPh}`);
-
-  signInWithPhoneNumber(fireBaseAuth, formatPh, appVerifier)
-    .then((confirmationResult) => {
-      console.log('OTP sent successfully');
-      window.confirmationResult = confirmationResult;
-      setLoading(false);
-      setShowOTP(true);
-      toast.success("OTP sent successfully! :)");
-    }).catch((error) => {
-      console.error('Error sending OTP:', error);
-      toast.error(`Error sending OTP: ${error.message}`);
-      setLoading(false);
-    });
-}
-
 
   return (
-    <FireBaseContext.Provider value={{ signUpUserWithEmailAndPassword, signInUserWithEmailAndPassword, addData, signInWithGoogle, fireBaseAuth, signOutUser, signInWithGitHub, signInWithMicrosoft, onSignUp }}>
+    <FireBaseContext.Provider value={{ signUpUserWithEmailAndPassword, signInUserWithEmailAndPassword, addData, signInWithGoogle, fireBaseAuth, signOutUser, signInWithGitHub, signInWithMicrosoft }}>
       {children}
     </FireBaseContext.Provider>
   );
